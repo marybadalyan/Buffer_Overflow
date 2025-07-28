@@ -32,14 +32,23 @@ void setup_segfault_handler() {
 
 
 #ifdef _WIN32
-LONG WINAPI SegFaultHandler(EXCEPTION_POINTERS* ExceptionInfo) {
+
+LONG WINAPI VectoredHandler(PEXCEPTION_POINTERS ExceptionInfo) {
     if (ExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION) {
-        const char msg[] = "Access violation caught, exiting\n";
+        const char msg[] = "Access violation caught in VEH, exiting silently\n";
         DWORD written;
         WriteFile(GetStdHandle(STD_ERROR_HANDLE), msg, sizeof(msg) - 1, &written, nullptr);
-        ExitProcess(EXIT_SUCCESS);  // EXIT_SUCCESS instead of EXIT_FAILURE
+        ExitProcess(0); // Exit successfully, no crash dialog
+        // or return EXCEPTION_CONTINUE_EXECUTION; // continue silently (dangerous)
     }
-    return EXCEPTION_CONTINUE_SEARCH;
+    return EXCEPTION_CONTINUE_SEARCH; // pass to next handler if not handled
+}
+
+void setup_segfault_handler() {
+    PVOID handler = AddVectoredExceptionHandler(1, VectoredHandler);
+    if (!handler) {
+        std::cerr << "Failed to add vectored exception handler\n";
+    }
 }
 #endif
 
@@ -59,11 +68,7 @@ void vulnerable_function() {
 }
 
 int main() {
-    #ifndef _WIN32
-        setup_segfault_handler();
-    #else
-        SetUnhandledExceptionFilter(SegFaultHandler);
-    #endif
+    setup_segfault_handler();
 
     vulnerable_function();
     printf("Returned safely from vulnerable_function\n");
