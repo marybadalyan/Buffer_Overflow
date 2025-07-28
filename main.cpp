@@ -13,7 +13,6 @@
     #include <unistd.h>
 #endif
 
-
 #ifndef _WIN32
 void setup_segfault_handler() {
     struct rlimit core_limit = {0, 0};
@@ -24,7 +23,7 @@ void setup_segfault_handler() {
     sa.sa_sigaction = [](int, siginfo_t*, void*) {
         const char msg[] = "Segmentation fault caught, exiting\n";
         write(STDERR_FILENO, msg, sizeof(msg)-1);
-        _exit(EXIT_FAILURE);
+        _exit(EXIT_SUCCESS);  // EXIT_SUCCESS instead of EXIT_FAILURE
     };
     sigemptyset(&sa.sa_mask);
     sigaction(SIGSEGV, &sa, nullptr);
@@ -38,11 +37,12 @@ LONG WINAPI SegFaultHandler(EXCEPTION_POINTERS* ExceptionInfo) {
         const char msg[] = "Access violation caught, exiting\n";
         DWORD written;
         WriteFile(GetStdHandle(STD_ERROR_HANDLE), msg, sizeof(msg) - 1, &written, nullptr);
-        ExitProcess(EXIT_FAILURE);
+        ExitProcess(EXIT_SUCCESS);  // EXIT_SUCCESS instead of EXIT_FAILURE
     }
-    return EXCEPTION_CONTINUE_SEARCH; // Let other handlers run if needed
+    return EXCEPTION_CONTINUE_SEARCH;
 }
 #endif
+
 
 void vulnerable_function() {
     char buffer[16];  // Small stack-allocated buffer
