@@ -93,9 +93,9 @@ jobs:
           if [ -f "${executable_name}" ]; then
             # Pass the analysis path (ARG 1) and optimization level (ARG 2)
             if [ "$RUNNER_OS" == "Windows" ]; then
-              powershell -Command "& \"${executable}\""
+              powershell -Command "& \"${executable_name}\""
             else
-              "./$executable"
+              "./$executable_name"
             fi
             # --- Analyze the output ---
             echo "Running analysis on: ${executable_name}"
