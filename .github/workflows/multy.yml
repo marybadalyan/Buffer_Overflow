@@ -82,8 +82,8 @@ jobs:
         exec2="overflow_no_protection"  # Replace with your second executable name
 
         if [ "$RUNNER_OS" == "Windows" ]; then
-          exec1="${exec1}.exe"
-          exec2="${exec2}.exe"
+          exec1="${{ matrix.build_type }}/${exec1}.exe"
+          exec2="${{ matrix.build_type }}/${exec2}.exe"
         fi
 
         for executable in "$exec1" "$exec2"; do
