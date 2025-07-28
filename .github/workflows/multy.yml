@@ -90,7 +90,7 @@ jobs:
           echo "Checking if executable exists: $executable"
           if [ -f "$executable" ]; then
             echo "Executable found, running it"
-            ./"$executable" 
+            "./$executable" 
           else
             echo "Executable not found: $executable"
             exit 1
