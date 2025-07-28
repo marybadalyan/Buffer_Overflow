@@ -8,8 +8,6 @@
     #include <windows.h>
     #include <processthreadsapi.h>
 #else
-    #include <sys/prctl.h>
-    prctl(PR_SET_DUMPABLE, 0);
     #include <signal.h>
     #include <sys/resource.h>
     #include <unistd.h>
