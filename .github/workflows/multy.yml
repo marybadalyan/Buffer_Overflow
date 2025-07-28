@@ -92,7 +92,18 @@ jobs:
           # --- Run the executable with all required arguments ---
           if [ -f "${executable_name}" ]; then
             # Pass the analysis path (ARG 1) and optimization level (ARG 2)
-            "./${executable_name}" 
+            if [ "$RUNNER_OS" == "Windows" ]; then
+              powershell -Command "& \"${executable}\""
+            else
+              "./$executable"
+            fi
+            # --- Analyze the output ---
+            echo "Running analysis on: ${executable_name}"
+            if [ "$RUNNER_OS" == "Windows" ]; then
+              ./${executable_name} -analyze "C:/path/to/analysis"
+            else
+              ./${executable_name} -analyze "/path/to/analysis"
+            fi
           else
             echo "Error: Executable not found: $(pwd)/${executable_name}"
             exit 1
