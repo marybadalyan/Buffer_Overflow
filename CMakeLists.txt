@@ -6,7 +6,7 @@ add_executable(overflow_with_protection main.cpp)
 
 if (MSVC)
     # MSVC stack protector flag
-    target_compile_options(overflow_with_protection PRIVATE /GS /RTC1)
+    target_compile_options(overflow_with_protection PRIVATE /GS )
 else()
     # GCC/Clang flags for stack protector and no PIE
     target_compile_options(overflow_with_protection PRIVATE -fstack-protector -no-pie -O0 -g)
