@@ -17,7 +17,7 @@ add_executable(overflow_no_protection main.cpp)
 
 if (MSVC)
     # Disable MSVC stack protector
-    target_compile_options(overflow_no_protection PRIVATE /GS- /RTC1)
+    target_compile_options(overflow_no_protection PRIVATE /GS-)
 else()
     target_compile_options(overflow_no_protection PRIVATE -fno-stack-protector -no-pie -O0 -g)
 endif()
