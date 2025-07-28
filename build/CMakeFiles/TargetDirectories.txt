@@ -1,4 +1,0 @@
-C:/Users/MeriBadalyan/Buffer_Overflow/build/CMakeFiles/overflow_with_protection.dir
-C:/Users/MeriBadalyan/Buffer_Overflow/build/CMakeFiles/overflow_no_protection.dir
-C:/Users/MeriBadalyan/Buffer_Overflow/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/MeriBadalyan/Buffer_Overflow/build/CMakeFiles/ZERO_CHECK.dir
