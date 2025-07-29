@@ -23,6 +23,9 @@ else()
 endif()
 
 
+set(ANALYSIS_DIR "${CMAKE_BINARY_DIR}/analysis")
+file(MAKE_DIRECTORY ${ANALYSIS_DIR})
+
 if(MSVC)
     add_custom_command(
         TARGET overflow_with_protection POST_BUILD
