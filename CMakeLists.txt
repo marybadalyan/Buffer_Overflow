@@ -21,3 +21,35 @@ if (MSVC)
 else()
     target_compile_options(overflow_no_protection PRIVATE -fno-stack-protector -no-pie -O0 -g)
 endif()
+
+
+if(MSVC)
+    add_custom_command(
+        TARGET overflow_with_protection POST_BUILD
+        # This command runs after the build for the given configuration
+        COMMAND cmd /c "dumpbin /DISASM \"$<TARGET_OBJECTS:overflow_with_protection>\" > \"${ANALYSIS_DIR}/assembly.txt\""
+        COMMENT "Dumping assembly for $<CONFIG> build to analysis/assembly.txt"
+    )
+else() # For GCC/Clang
+     add_custom_command(
+        TARGET overflow_with_protection POST_BUILD
+        COMMAND objdump -d -M intel "$<TARGET_FILE:overflow_with_protection>" > "${ANALYSIS_DIR}/assembly.txt"
+        COMMENT "Dumping assembly for $<CONFIG> build to analysis/assembly.txt"
+    )
+endif()
+
+
+if(MSVC)
+    add_custom_command(
+        TARGET overflow_no_protection POST_BUILD
+        # This command runs after the build for the given configuration
+        COMMAND cmd /c "dumpbin /DISASM \"$<TARGET_OBJECTS:overflow_no_protection>\" > \"${ANALYSIS_DIR}/assembly.txt\""
+        COMMENT "Dumping assembly for $<CONFIG> build to analysis/assembly.txt"
+    )
+else() # For GCC/Clang
+     add_custom_command(
+        TARGET overflow_no_protection POST_BUILD
+        COMMAND objdump -d -M intel "$<TARGET_FILE:overflow_no_protection>" > "${ANALYSIS_DIR}/assembly.txt"
+        COMMENT "Dumping assembly for $<CONFIG> build to analysis/assembly.txt"
+    )
+endif()
